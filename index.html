@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MindMate - Your AI Mental Health Companion</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Boxicons for clean modern icons -->
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <link rel="stylesheet" href="style.css">
+    
+    <!-- Google Identity Services SDK -->
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
+</head>
+<body>
+    <div class="app-wrapper">
+        <!-- Navigation Header -->
+        <header class="top-nav">
+            <div class="logo">
+                <i class='bx bxs-brain'></i>
+                <span>MindMate</span>
+            </div>
+            <nav class="nav-links">
+                <button id="about-btn" class="nav-btn"><i class='bx bx-info-circle'></i> About</button>
+                <button id="profile-btn" class="nav-btn"><i class='bx bx-user-circle'></i> Profile</button>
+                <button id="theme-toggle" class="theme-btn" aria-label="Toggle Theme">
+                    <i class='bx bx-moon'></i>
+                </button>
+            </nav>
+        </header>
+
+        <!-- Main Content Area -->
+        <main class="main-content">
+            <!-- Background Ornaments -->
+            <div class="bg-gradient bg-1"></div>
+            <div class="bg-gradient bg-2"></div>
+
+            <!-- View: Welcome & Mood Selection -->
+            <section id="welcome-view" class="view-section active">
+                <div class="welcome-card glass-panel">
+                    <div class="welcome-header">
+                        <h1>Hi there, I'm MindMate.</h1>
+                        <p>Your safe space to talk, reflect, and find balance.</p>
+                    </div>
+                    
+                    <div class="mood-selector">
+                        <h3>How are you feeling today?</h3>
+                        <div class="mood-grid">
+                            <button class="mood-btn" data-mood="Happy">
+                                <span class="emoji">😊</span>
+                                <span class="label">Happy</span>
+                            </button>
+                            <button class="mood-btn" data-mood="Calm">
+                                <span class="emoji">😌</span>
+                                <span class="label">Calm</span>
+                            </button>
+                            <button class="mood-btn" data-mood="Stressed">
+                                <span class="emoji">😰</span>
+                                <span class="label">Stressed</span>
+                            </button>
+                            <button class="mood-btn" data-mood="Anxious">
+                                <span class="emoji">🌪️</span>
+                                <span class="label">Anxious</span>
+                            </button>
+                            <button class="mood-btn" data-mood="Sad">
+                                <span class="emoji">😔</span>
+                                <span class="label">Sad</span>
+                            </button>
+                            <button class="mood-btn" data-mood="Overwhelmed">
+                                <span class="emoji">🤯</span>
+                                <span class="label">Overwhelmed</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div class="welcome-actions">
+                        <button id="start-chat-btn" class="btn primary-btn" disabled>Start Chatting</button>
+                    </div>
+                </div>
+            </section>
+
+            <!-- View: Chat Interface -->
+            <section id="chat-view" class="view-section hidden">
+                <div class="chat-container glass-panel">
+                    
+                    <!-- Professional Help Disclaimer -->
+                    <div class="disclaimer-banner">
+                        <i class='bx bx-error-circle'></i>
+                        <p><strong>Disclaimer:</strong> MindMate is an AI companion for basic mental wellness support. It is <strong>not</strong> an alternative to professional medical advice, diagnosis, or treatment. If you are in a crisis, please seek professional help immediately.</p>
+                    </div>
+
+                    <!-- Chat Feed -->
+                    <div id="chat-feed" class="chat-feed">
+                        <!-- Messages dynamically added here -->
+                    </div>
+
+                    <!-- Loading Indicator -->
+                    <div id="typing-indicator" class="typing-indicator hidden">
+                        <span>MindMate is typing</span>
+                        <div class="dots">
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                            <div class="dot"></div>
+                        </div>
+                    </div>
+
+                    <!-- Chat Input -->
+                    <div class="chat-input-area">
+                        <form id="chat-form">
+                            <input type="text" id="message-input" placeholder="Type a message..." autocomplete="off" required>
+                            <button type="submit" id="send-btn" class="btn send-btn" aria-label="Send Message">
+                                <i class='bx bx-send'></i>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </section>
+        </main>
+
+        <!-- Modals -->
+
+        <!-- Profile Modal -->
+        <div id="profile-modal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <button class="close-modal"><i class='bx bx-x'></i></button>
+                <h2>Your Profile</h2>
+                
+                <div class="profile-section">
+                    <div class="auth-box" id="auth-container">
+                        <!-- Logged Out View -->
+                        <div id="logged-out-view">
+                            <div id="googleButton"></div>
+                            <p class="auth-note" style="margin-top: 10px;">Sign in to save your memories and customize your avatar.</p>
+                        </div>
+                        
+                        <!-- Logged In View -->
+                        <div id="logged-in-view" class="hidden" style="display: flex; flex-direction: column; align-items: center; gap: 1rem;">
+                            <div class="user-profile-info" style="display: flex; align-items: center; gap: 15px;">
+                                <img id="user-avatar" src="" alt="Profile Picture" style="width: 50px; height: 50px; border-radius: 50%;">
+                                <div style="text-align: left;">
+                                    <h3 id="user-name" style="margin: 0; font-size: 1.1rem;">Name</h3>
+                                    <span id="user-email" style="font-size: 0.85rem; color: var(--text-muted);">Email</span>
+                                </div>
+                            </div>
+                            <button id="sign-out-btn" class="btn outline-btn" style="width: 100%; border: 1px solid var(--border-light); padding: 8px; border-radius: 6px; cursor: pointer;">Sign Out</button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="profile-section">
+                    <h3>Choose Avatar</h3>
+                    <div class="avatar-grid">
+                        <div class="avatar-item selected"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=Felix" alt="Avatar 1"></div>
+                        <div class="avatar-item"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=Daisy" alt="Avatar 2"></div>
+                        <div class="avatar-item"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=Max" alt="Avatar 3"></div>
+                        <div class="avatar-item"><img src="https://api.dicebear.com/8.x/bottts/svg?seed=Luna" alt="Avatar 4"></div>
+                    </div>
+                </div>
+
+                <div class="profile-section memories-section">
+                    <h3>Memories <span class="badge">Coming Soon</span></h3>
+                    <div class="memories-placeholder">
+                        <i class='bx bx-lock-alt'></i>
+                        <p>Sign in to unlock your mood history and reflections tracking.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- About Modal -->
+        <div id="about-modal" class="modal-overlay hidden">
+            <div class="modal-content glass-panel">
+                <button class="close-modal"><i class='bx bx-x'></i></button>
+                <h2>About MindMate</h2>
+                <div class="about-content">
+                    <p>MindMate is an AI-powered mental health chatbot designed to provide a safe, anonymous space for you to express your thoughts and feelings.</p>
+                    <p>Built for a hackathon, this MVP focuses on bringing calmness, quick coping strategies (like breathing exercises), and a listening ear through modern AI.</p>
+                    <div class="about-features">
+                        <div class="feature"><i class='bx bx-check'></i> 100% Anonymous</div>
+                        <div class="feature"><i class='bx bx-check'></i> Real-time AI Support</div>
+                        <div class="feature"><i class='bx bx-check'></i> Basic Coping Strategies</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Scripts -->
+    <script src="api.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>
