@@ -183,7 +183,7 @@ startChatBtn.addEventListener('click', () => {
 
     // Add initial greeting based on mood
     setTimeout(() => {
-        addMessage(`Hi there. I see you're feeling **${selectedMood.toLowerCase()}** today. I'm here to listen. How can I help you?`, 'ai');
+        addMessage(`Hi there. I see you're feeling **${selectedMood.toLowerCase()}** today. I'm here to listen. How can I help you?`, 'ai', true);
     }, 500);
 });
 
@@ -201,18 +201,28 @@ function formatText(text) {
     return text.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
 }
 
-function addMessage(text, sender) {
+async function addMessage(text, sender, isTyping = false) {
     const messageDiv = document.createElement('div');
     messageDiv.classList.add('message', sender === 'user' ? 'user-message' : 'ai-message');
 
     const bubbleDiv = document.createElement('div');
     bubbleDiv.classList.add('message-bubble');
-    bubbleDiv.innerHTML = formatText(text);
 
     messageDiv.appendChild(bubbleDiv);
     chatFeed.appendChild(messageDiv);
 
-    scrollToBottom();
+    if (isTyping) {
+        let currentText = '';
+        for (let i = 0; i < text.length; i++) {
+            currentText += text[i];
+            bubbleDiv.innerHTML = formatText(currentText);
+            scrollToBottom();
+            await new Promise(r => setTimeout(r, 15)); // 15ms per character typing speed
+        }
+    } else {
+        bubbleDiv.innerHTML = formatText(text);
+        scrollToBottom();
+    }
 }
 
 function scrollToBottom() {
@@ -240,5 +250,5 @@ chatForm.addEventListener('submit', async (e) => {
     typingIndicator.classList.add('hidden');
 
     // Add AI message
-    addMessage(response.message, 'ai');
+    addMessage(response.message, 'ai', true);
 });
