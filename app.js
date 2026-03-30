@@ -134,6 +134,9 @@ window.onload = function () {
 
 if (signOutBtn) {
     signOutBtn.addEventListener('click', () => {
+        if (window.google) {
+            google.accounts.id.disableAutoSelect();
+        }
         localStorage.removeItem('mindmate_user');
         updateAuthUI();
     });
