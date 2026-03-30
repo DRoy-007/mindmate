@@ -85,6 +85,16 @@
             <section id="chat-view" class="view-section hidden">
                 <div class="chat-container glass-panel">
                     
+                    <!-- Chat Header -->
+                    <div class="chat-header" style="display: flex; justify-content: space-between; align-items: center; padding: 0.8rem 1.5rem; border-bottom: 1px solid var(--border-color); background: rgba(128,128,128,0.02);">
+                        <div style="font-size: 0.95rem;">
+                            Feeling: <span id="current-mood-display" style="font-weight: 600; color: var(--primary);">Happy</span>
+                        </div>
+                        <button id="switch-mood-btn" class="btn" style="padding: 0.4rem 0.8rem; border-radius: 1rem; border: 1px solid var(--border-color); background: rgba(128,128,128,0.1); color: var(--text-main); font-size: 0.8rem; cursor: pointer; display: flex; align-items: center; gap: 0.3rem;">
+                            <i class='bx bx-refresh'></i> Switch Emotion
+                        </button>
+                    </div>
+
                     <!-- Professional Help Disclaimer -->
                     <div class="disclaimer-banner">
                         <i class='bx bx-error-circle'></i>

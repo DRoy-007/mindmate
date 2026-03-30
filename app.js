@@ -28,6 +28,9 @@ const typingIndicator = document.getElementById('typing-indicator');
 
 const avatarItems = document.querySelectorAll('.avatar-item');
 
+const switchMoodBtn = document.getElementById('switch-mood-btn');
+const currentMoodDisplay = document.getElementById('current-mood-display');
+
 let selectedMood = '';
 
 // --- Theme Management ---
@@ -171,6 +174,8 @@ startChatBtn.addEventListener('click', () => {
 
     // Send mood to the mock backend API
     AIBackendMock.setMood(selectedMood);
+    
+    if (currentMoodDisplay) currentMoodDisplay.textContent = selectedMood;
 
     // Transition views
     welcomeView.classList.add('hidden');
@@ -181,6 +186,13 @@ startChatBtn.addEventListener('click', () => {
         addMessage(`Hi there. I see you're feeling **${selectedMood.toLowerCase()}** today. I'm here to listen. How can I help you?`, 'ai');
     }, 500);
 });
+
+if (switchMoodBtn) {
+    switchMoodBtn.addEventListener('click', () => {
+        chatView.classList.add('hidden');
+        welcomeView.classList.remove('hidden');
+    });
+}
 
 
 // --- Chat System ---
